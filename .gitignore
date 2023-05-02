@@ -1,0 +1,7 @@
+working/**
+build/**
+doc/**
+!doc/mpjobs.tex
+!doc/mpjobs.pdf
+!doc/template/
+!doc/template/*.tex
