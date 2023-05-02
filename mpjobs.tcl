@@ -9,7 +9,7 @@
 # redistribution, and for a DISCLAIMER OF ALL WARRANTIES.
 ################################################################################
 
-package require tda::tbl 0.1
+package require tda::tbl 0.1; # for getJobTable
 
 # Define namespace
 namespace eval ::mpjobs {
@@ -58,11 +58,14 @@ namespace eval ::mpjobs {
 #
 # Main command, all other commands must be called in body of jobBoard.
 #
+# Syntax:
+# jobBoard <-wipe> <-debug> <-timeout $time> $path $body
+#
 # Arguments:
 # -wipe:    Option to wipe job board
 # -debug:   Option to print out information about jobs
-# -timeout $time:       Option to timeout
-# path:     Path where to store job data
+# time      Option to timeout (format HH:MM:SS)
+# path:     Folder path where to store job data
 # body:     Body to evaluate by coordinator thread
 
 proc ::mpjobs::jobBoard {args} {
@@ -222,7 +225,13 @@ proc ::mpjobs::jobBoard {args} {
 
 # DebugPuts --
 #
-# Print to screen if -debug is on.
+# Print to screen if -debug is on, with time-stamp
+#
+# Syntax:
+# DebugPuts $message
+#
+# Arguments:
+# message       Message to put to screen
 
 proc ::mpjobs::DebugPuts {message} {
     variable debugMode
@@ -237,6 +246,8 @@ proc ::mpjobs::DebugPuts {message} {
 # Check if the user exited the analysis or the time limit was reached.
 # Throws error, which is caught by the main jobBoard process and passed to
 # caller after all existing jobs are complete.
+#
+# User can break out of loop with "stop"
 
 proc ::mpjobs::CheckExit {} {
     variable maxTime
@@ -289,6 +300,9 @@ proc ::mpjobs::wipeJobs {} {
 # Reset jobs with non-zero status to status 0
 # This removes all results, but does not remove the jobs.
 #
+# Syntax:
+# resetJobs <$jobTags>
+#
 # Arguments:
 # jobTags:      Job tags to reset. Default -all 
 
@@ -331,6 +345,9 @@ proc ::mpjobs::resetJobs {{jobTags -all}} {
 # 
 # Create a unique job in job board.
 # If the job already exists, simply return the corresponding jobTag.
+#
+# Syntax:
+# makeJob <$inputDir> <$inputFile> $varName $value ...
 # 
 # Arguments:
 # inputDir:     Input directory for job (absolute or relative to job board).
@@ -388,6 +405,9 @@ proc ::mpjobs::makeJob {args} {
 #
 # Execute all jobs in queue
 # If in parallel mode, may return with jobs still running.
+#
+# Syntax:
+# runJobs <$jobTags>
 #
 # Arguments:
 # jobTags:          Jobs to run. Default -all
@@ -468,6 +488,9 @@ proc ::mpjobs::runJobs {{jobTags -all}} {
 #
 # Gets a worker, updating data structures if the worker was assigned to a job
 #
+# Syntax:
+# GetWorker <$pid>
+#
 # Arguments:
 # pid:      PID to get (default ANY)
 
@@ -493,6 +516,9 @@ proc ::mpjobs::GetWorker {{pid ANY}} {
 #
 # Private procedure that runs a single job in separate instance of OpenSees
 # Can be called in series by main thread or in parallel by worker threads.
+#
+# Syntax:
+# RunJob $jobTag
 # 
 # Arguments:
 # jobTag:           Job to run
@@ -538,6 +564,9 @@ proc ::mpjobs::RunJob {jobTag} {
 #
 # Wait for active jobs, in a blocking way (in parallel mode)
 #
+# Syntax:
+# waitForJobs <$jobTags>
+#
 # jobTags:      List of job tags, or -all for all active jobs. Default -all
 
 proc ::mpjobs::waitForJobs {{jobTags -all}} {
@@ -564,6 +593,10 @@ proc ::mpjobs::waitForJobs {{jobTags -all}} {
 # updateJobs --
 # 
 # Update the status of active jobs in a non-blocking way (in parallel mode)
+# Returns blank.
+#
+# Syntax:
+# updateJobs <$jobTags>
 #
 # Arguments:
 # jobTags:      List of job tags, or -all for all active jobs. Default -all
@@ -602,6 +635,9 @@ proc ::mpjobs::updateJobs {{jobTags -all}} {
 #
 # Get list of job tags.
 # Designed more for introspection than actual use in running jobs.
+#
+# Syntax:
+# getJobTags <$option>
 #
 # Arguments:
 # option:       Option for type of jobs to return. Default -all.
@@ -649,6 +685,9 @@ proc ::mpjobs::getJobTags {{option -all}} {
 # getJobCount --
 #
 # Get total number of jobs
+#
+# Syntax:
+# getJobCount
 
 proc ::mpjobs::getJobCount {} {
     ValidateScope
@@ -660,6 +699,12 @@ proc ::mpjobs::getJobCount {} {
 #
 # Returns the inputs of a job in dictionary form
 # Fields: folder, filename, and user-defined variables
+#
+# Syntax:
+# getJobInputs $jobTag
+#
+# Arguments:
+# jobTag:           Integer job tag
 
 proc ::mpjobs::getJobInputs {jobTag} {
     ValidateScope
@@ -672,6 +717,12 @@ proc ::mpjobs::getJobInputs {jobTag} {
 # getJobStatus --
 #
 # Returns the saved status of a job.
+#
+# Syntax:
+# getJobStatus $jobTag
+#
+# Arguments:
+# jobTag:           Integer job tag
 
 proc ::mpjobs::getJobStatus {jobTag} {
     ValidateScope
@@ -685,6 +736,12 @@ proc ::mpjobs::getJobStatus {jobTag} {
 # Get results from job, reading from .dat file if needed
 # Returns blank if job is not complete.
 # Returns options dictionary for error.
+#
+# Syntax:
+# getJobResults $jobTag
+#
+# Arguments:
+# jobTag:           Integer job tag
 
 proc ::mpjobs::getJobResults {jobTag} {
     ValidateScope
@@ -709,6 +766,12 @@ proc ::mpjobs::getJobResults {jobTag} {
 # getJobTable --
 #
 # Get a table with job data.
+#
+# Syntax:
+# getJobTable <$jobTags>
+#
+# Arguments:
+# jobTags:      List of integer job tags. Default -all
 
 proc ::mpjobs::getJobTable {{jobTags -all}} {
     ValidateScope
@@ -736,8 +799,11 @@ proc ::mpjobs::getJobTable {{jobTags -all}} {
 # ValidateScope --
 #
 # Ensure that commands are called in the proper scope (within jobBoard body)
+#
+# Syntax:
+# ValidateScope
 
-proc ::mpjobs::ValidateScope {args} {
+proc ::mpjobs::ValidateScope {} {
     variable inScope
     if {!$inScope} {
         return -code error "Must call within body of \"jobBoard\""
@@ -747,6 +813,12 @@ proc ::mpjobs::ValidateScope {args} {
 # ValidateJobTags --
 #
 # Private procedure to validate a job tag input from user
+#
+# Syntax:
+# ValidateJobTags $jobTags
+#
+# Arguments:
+# jobTags:      List of integer job tags
 
 proc ::mpjobs::ValidateJobTags {jobTags} {
     variable jobData
