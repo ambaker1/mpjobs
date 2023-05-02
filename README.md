@@ -1,2 +1,3 @@
 # mpjobs
-Job Board Framework for OpenSeesMP
+Parallel/Parametric Framework for OpenSeesMP or OpenSeesMPI
+
