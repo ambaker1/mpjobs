@@ -1,6 +1,7 @@
 working/**
 build/**
 doc/**
+tests/CantileverStudy
 !doc/mpjobs.tex
 !doc/mpjobs.pdf
 !doc/template/
