@@ -11,7 +11,7 @@
 \renewcommand{\^}[1]{\textsuperscript{#1}}
 \renewcommand{\_}[1]{\textsubscript{#1}}
 
-\title{\Huge OpenSeesMP Job Board Framework (mpjobs)\\\small Version \version}
+\title{\LARGE Parallel/Parametric Job Board Framework (mpjobs)\\\small Version \version}
 \author{Alex Baker\\\small\url{https://github.com/ambaker1/mpjobs}}
 \date{\small\today}
 \begin{document}
@@ -23,7 +23,7 @@ Additionally, it formalizes and organizes the parametric study in a way that sup
 \end{abstract}
 \clearpage
 \section{General}
-The main command for the job module is \cmdlink{jobBoard}.
+The main command for the mpjobs package is \cmdlink{jobBoard}.
 All other job board commands must be called within the body of \cmdlink{jobBoard}.
 This command encapsulates an ensemble of subcommands used for creating, manipulating, running, and accessing jobs.
 This command can be called in series or in parallel (OpenSeesMP).
