@@ -30,4 +30,4 @@ file copy -force {*}[glob build/*.tcl] [pwd]
 tin bake doc/template/version.tin doc/template/version.tex $config
 # Run installer
 exec tclsh install.tcl
-tin installed mpjobs -exact $version
+assert [tin installed mpjobs -exact $version] eq $version
