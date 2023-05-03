@@ -6,3 +6,6 @@ tests/CantileverStudy
 !doc/mpjobs.pdf
 !doc/template/
 !doc/template/*.tex
+!doc/references/
+!doc/references/*.bib
+!doc/references/*.tex

@@ -270,6 +270,9 @@ proc ::mpjobs::CheckExit {} {
 #
 # Clear all data and files for job board. 
 # Cannot specify certain jobs. Must wipe all.
+#
+# Syntax:
+# wipeJobs
 
 proc ::mpjobs::wipeJobs {} {
     ValidateScope
@@ -635,7 +638,6 @@ proc ::mpjobs::updateJobs {{jobTags -all}} {
 # getJobTags --
 #
 # Get list of job tags.
-# Designed more for introspection than actual use in running jobs.
 #
 # Syntax:
 # getJobTags <$option>
@@ -831,4 +833,4 @@ proc ::mpjobs::ValidateJobTags {jobTags} {
 }
 
 # Finally, provide the package
-package provide mpjobs 0.1.1
+package provide mpjobs 0.1.2

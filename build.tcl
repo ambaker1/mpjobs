@@ -1,5 +1,5 @@
 package require tin 0.4.5
-set version 0.1.1
+set version 0.1.2
 set config [dict create VERSION $version]
 tin bake src/install.tin build/install.tcl $config
 tin bake src/pkgIndex.tin build/pkgIndex.tcl $config
