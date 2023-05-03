@@ -9,6 +9,7 @@
 # redistribution, and for a DISCLAIMER OF ALL WARRANTIES.
 ################################################################################
 
+if {[catch {getPID}]} {return}; # Ensure that OpenSeesMP commands are available
 package require tda::tbl 0.1; # for getJobTable
 
 # Define namespace
@@ -830,4 +831,4 @@ proc ::mpjobs::ValidateJobTags {jobTags} {
 }
 
 # Finally, provide the package
-package provide mpjobs 0.1
+package provide mpjobs 0.1.1
