@@ -13,7 +13,6 @@ This package is a Tin package. Tin makes installing Tcl packages easy, and is av
 
 After installing Tin, either download the latest release of flytrap and run "install.tcl", or simply run the following script in a Tcl interpreter:
 ```tcl
-package require tin 0.4.5
-tin add -auto mpjobs https://github.com/ambaker1/mpjobs install.tcl 0.1-
+package require tin 0.4.6
 tin install mpjobs
 ```
