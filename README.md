@@ -10,8 +10,7 @@ Full documentation [here](https://raw.githubusercontent.com/ambaker1/mpjobs/main
  
 ## Installation
 This package is a Tin package. Tin makes installing Tcl packages easy, and is available [here](https://github.com/ambaker1/Tin).
-
-After installing Tin, either download the latest release of flytrap and run "install.tcl", or simply run the following script in a Tcl interpreter:
+After installing Tin, simply include the following in your script to install tda:
 ```tcl
 package require tin 0.4.6
 tin install mpjobs
