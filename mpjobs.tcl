@@ -9,7 +9,11 @@
 # redistribution, and for a DISCLAIMER OF ALL WARRANTIES.
 ################################################################################
 
-if {[catch {getPID}]} {return}; # Ensure that OpenSeesMP commands are available
+# If running in tclsh, run in series.
+if {[info commands getPID] eq ""} {
+    proc ::getPID {args} {return 0}
+    proc ::getNP {args} {return 1}
+}
 package require tda::tbl 0.1; # for getJobTable
 
 # Define namespace
@@ -18,7 +22,7 @@ namespace eval ::mpjobs {
     variable debugMode false; # Whether to print debug statements
     variable maxTime Inf; # Maximum clock seconds time value for session
     variable stopped 0; # Whether the job board session has been stopped
-    variable execArgs [list [file dirname [info nameofexecutable]]/OpenSees]
+    variable execArgs OpenSees
     variable jobData ""; # Dictionary of job data
     # jobTag:
     #   inputs:     inputDir, inputFile, inputVars
@@ -132,7 +136,7 @@ proc ::mpjobs::jobBoard {args} {
         puts -nonewline $session [pid]; # system process ID (not getPID)
         flush $session
         # Send job board to worker processes
-        if {[getNP] > 0} {
+        if {[getNP] > 1} {
             send $jobBoard
         }
         # Open save-state files, creating if they do not exist
@@ -186,7 +190,7 @@ proc ::mpjobs::jobBoard {args} {
         fconfigure stdin {*}$stdinConfig
         DebugPuts "Closing job board"
         # Close workers
-        if {[getNP] > 0} {
+        if {[getNP] > 1} {
             # Send signal to close
             for {set i 1} {$i < [getNP]} {incr i} {
                 send -pid [GetWorker] CLOSE
@@ -833,4 +837,4 @@ proc ::mpjobs::ValidateJobTags {jobTags} {
 }
 
 # Finally, provide the package
-package provide mpjobs 0.1.2
+package provide mpjobs 0.1.4

@@ -1,4 +1,4 @@
-package require tin 0.4.5
-tin depend tda 0.1
+package require tin 1.0
+tin depend tda @TDA_VERSION@
 set dir [tin mkdir -force mpjobs @VERSION@]
 file copy LICENSE README.md pkgIndex.tcl mpjobs.tcl $dir

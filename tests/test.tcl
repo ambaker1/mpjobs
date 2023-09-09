@@ -3,7 +3,7 @@ source ../build/pkgIndex.tcl
 package require tin
 tin import mpjobs
 tin import writeTable from tda
-tin import assert from flytrap
+tin import assert from tin
 
 # jobBoard (with -debug and -wipe)
 # makeJob
