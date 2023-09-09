@@ -1,13 +1,19 @@
-package require tin 0.4.5
-set version 0.1.2
+package require tin 1.0
+set version 0.1.4
 set config [dict create VERSION $version]
+dict set config TDA_VERSION 0.1
 tin bake src/install.tin build/install.tcl $config
 tin bake src/pkgIndex.tin build/pkgIndex.tcl $config
 tin bake src/mpjobs.tin build/mpjobs.tcl $config
-tin import assert from flytrap
+tin import assert from tin
 
 # Run tests
 cd tests
+# Series tclsh
+puts "Running tests in tclsh"
+catch {exec tclsh test.tcl} result options
+puts $result
+assert [lindex [dict get $options -errorcode] end] == 1
 # Series OpenSees
 puts "Running tests in OpenSees"
 catch {exec OpenSees test.tcl} result options
