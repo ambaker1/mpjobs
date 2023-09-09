@@ -837,4 +837,4 @@ proc ::mpjobs::ValidateJobTags {jobTags} {
 }
 
 # Finally, provide the package
-package provide mpjobs 0.1.4
+package provide mpjobs 0.1.3
